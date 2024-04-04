@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #b2{
+            display: None;
+        }
+        body{
+             
+            background-color: rgb(193, 254, 254);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 100px;
+             
+        }
+        input[type=text]{
+            border: none;
+            border :1px solid black ;
+            height: 20px;
+            width: 180px;
+            outline: none;
+            background: transparent; 
+            border-radius: 8px;
+            
+
+        }
+        button{
+            background-color: rgb(45, 44, 44);
+            color: white;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+        button:hover{
+            font-size: 11px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>TODO LIST</h1>
+    <div class="div1">
+    <input type="text" id="t1">
+    <button id="b1" onclick="add()">ADD</button></div>
+    <button id="b2" onclick="update()">UPDATE</button>
+    <div class="disp"></div>
+    <script>
+        text_ref=document.getElementById("t1")
+        display_ref=document.getElementsByClassName("disp")
+        b1_ref=document.getElementById("b1")
+        b2_ref=document.getElementById("b2")
+        let index;
+        display()
+        function add(){
+            let arr=JSON.parse(localStorage.getItem("list"))
+            if(arr==null){
+            arr=[]
+            }
+            if(text_ref.value!=""){
+                arr.push(text_ref.value)
+                localStorage.setItem("list",JSON.stringify(arr))
+                display()
+                text_ref.value=""
+            }
+            else{
+                alert("List Item Should Not be Empty")
+            }
+        }
+        function display(){
+            display_ref[0].innerHTML=""
+            let list=JSON.parse(localStorage.getItem("list"))
+            if(list!=null){
+                for(let i in list){
+                    index=i
+                    let li=document.createElement("li")
+                    li.innerHTML=list[i]+" "+`<button onclick="del(${i})">DELETE</button>`+" "+`<button onclick="edit(${i})">EDIT</button>`
+                    display_ref[0].append(li)
+                }
+            }
+        }
+        function del(x){
+            let list=JSON.parse(localStorage.getItem("list"))
+            if(list!=null){
+                list.splice(x,1)
+                localStorage.setItem("list",JSON.stringify(list))
+                b1_ref.style.display="inline"
+            b2_ref.style.display="none"
+            text_ref.value=""
+            }
+            display()
+        }
+        function edit(y){
+            let list=JSON.parse(localStorage.getItem("list"))
+            text_ref.value=list[y]
+            b1_ref.style.display="None"
+            b2_ref.style.display="inline"
+        }
+        function update(){
+            let list=JSON.parse(localStorage.getItem("list"))
+            list[index]=text_ref.value
+            text_ref.value=""
+            b1_ref.style.display="inline"
+            b2_ref.style.display="none"
+            localStorage.setItem("list",JSON.stringify(list))
+            display()
+        }
+        
+        
+    </script>
+</body>
+</html>
